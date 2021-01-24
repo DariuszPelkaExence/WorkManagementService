@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Teamway.WorkManagementService.Repository.Model;
 
 
@@ -7,16 +8,16 @@ namespace Teamway.WorkManagementService.Repository
 {
     public interface IRepository
     {
-        int AddShift(AddShift shift);
+        Task<int> AddShift(AddShift shift);
 
-        IList<Shift> GetShiftsPerWorker(int workerId);
+        Task<IList<Shift>> GetShiftsPerWorker(int workerId);
 
-        Shift GetShift(int shiftId);
+        Task<Shift> GetShift(int shiftId);
 
-        Worker GetWorker(int workerId);
+        Task<Worker> GetWorker(int workerId);
 
-        RemoveShiftStatus RemoveShift(int shiftId);
+        Task<RemoveShiftStatus> RemoveShift(int shiftId);
 
-        AddWorkerStatus AddWorker(Worker worker);
+        Task<AddWorkerStatus> AddWorker(Worker worker);
     }
 }

@@ -8,16 +8,18 @@ namespace Teamway.WorkManagementService.API
 {
     public class MessagePublisher : IMessagePublisher
     {
-        public void SendMessageShiftCreated(Shift shift)
+        public Task<int> SendMessageShiftCreated(Shift shift)
         {
             Console.WriteLine("Shift created");
             // here we should send shift created message ...
+            return Task.FromResult(0);
         }
 
-        public void SendMessageShiftRemoved(Shift shift)
+        public Task<int> SendMessageShiftRemoved(Shift shift)
         {
             Console.WriteLine("Shift removed");
             // here we should send shift removed message ...
+            return Task.FromResult(0);
         }
     }
 }

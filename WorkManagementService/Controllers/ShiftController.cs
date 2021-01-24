@@ -3,6 +3,7 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Teamway.WorkManagementService.Repository;
 using Teamway.WorkManagementService.Repository.Model;
@@ -55,16 +56,16 @@ namespace Teamway.WorkManagementService.API
             }
 
             var shifts = _repository.GetShiftsPerWorker(workerId);
-            return shifts.Any(m => (m.WorkerId == workerId && m.Day == day && m.Type == type)
+            return shifts.Result.Any(m => (m.WorkerId == workerId && m.Day == day && m.Type == type)
                                     || (m.WorkerId == workerId && m.Day == previousShiftDay && m.Type == previousShiftType)
                                     || (m.WorkerId == workerId && m.Day == nextShiftDay && m.Type == nextShiftType));
         }
 
         [Microsoft.AspNetCore.Mvc.HttpGet("Get", Name = "Get")]
         [Produces("application/json")]
-        public IActionResult Get(int shiftId)
+        public async Task<IActionResult> GetAsync(int shiftId)
         {
-            var shift = _repository.GetShift(shiftId);
+            var shift = await _repository.GetShift(shiftId);
             if (shift != null)
             {
                 return Ok(shift);
@@ -76,14 +77,14 @@ namespace Teamway.WorkManagementService.API
         }
 
         [Microsoft.AspNetCore.Mvc.HttpGet("GetWorkersShifts", Name = "GetWorkersShifts")]
-        public IActionResult GetShiftsPerWorker(int workerId)
+        public async Task<IActionResult> GetShiftsPerWorkerAsync(int workerId)
         {
-            var shifts = _repository.GetShiftsPerWorker(workerId);
+            var shifts = await _repository.GetShiftsPerWorker(workerId);
             return Ok(shifts);
         }
 
         [Microsoft.AspNetCore.Mvc.HttpPost("Add", Name = "Add")]
-        public IActionResult Add(AddShift shift)
+        public async Task<IActionResult> Add(AddShift shift)
         {
             var worker = _repository.GetWorker(shift.WorkerId);
 
@@ -95,11 +96,11 @@ namespace Teamway.WorkManagementService.API
                 {
                     var id = _repository.AddShift(shift);
 
-                    if (id > 0)
+                    if (id.Result > 0)
                     {
-                        var newShift = _repository.GetShift(id);
-                        _messagePublisher.SendMessageShiftCreated(newShift);
-                        return Ok(id);
+                        var newShift = _repository.GetShift(id.Result);
+                        await _messagePublisher.SendMessageShiftCreated(newShift.Result);
+                        return Ok(id.Result);
                     }
                     else
                     {
@@ -138,11 +139,11 @@ namespace Teamway.WorkManagementService.API
 
 
         [Microsoft.AspNetCore.Mvc.HttpDelete("Remove", Name = "Remove")]
-        public IActionResult Remove(int shiftId)
+        public async Task<IActionResult> RemoveAsync(int shiftId)
         {
-            var removedShift = _repository.GetShift(shiftId);
-            _messagePublisher.SendMessageShiftRemoved(removedShift);
-            var operationStatus = _repository.RemoveShift(shiftId);
+            var removedShift = await _repository.GetShift(shiftId);
+            await _messagePublisher.SendMessageShiftRemoved(removedShift);
+            var operationStatus = await _repository.RemoveShift(shiftId);
 
             if (operationStatus == RemoveShiftStatus.Ok)
             {

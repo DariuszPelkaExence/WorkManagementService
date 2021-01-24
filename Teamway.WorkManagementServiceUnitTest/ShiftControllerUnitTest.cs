@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -24,16 +25,16 @@ namespace Teamway.WorkManagementService.UnitTest
             // Arrange
             var mockedPublisher = new Mock<IMessagePublisher>();
             var mockedRepository = new Mock<IRepository>();
-            mockedRepository.Setup(m => m.AddShift(It.IsAny<AddShift>())).Returns(1);
-            mockedRepository.Setup(m => m.GetWorker(It.IsAny<int>())).Returns(new Worker() { Id = 1, FirstName = "Jan", LastName = "Hello"});
-            mockedRepository.Setup(m => m.GetShiftsPerWorker(It.IsAny<int>())).Returns(new List<Shift>());
+            mockedRepository.Setup(m => m.AddShift(It.IsAny<AddShift>())).Returns(Task.FromResult(1));
+            mockedRepository.Setup(m => m.GetWorker(It.IsAny<int>())).Returns(Task.FromResult(new Worker() { Id = 1, FirstName = "Jan", LastName = "Hello"}));
+            mockedRepository.Setup(m => m.GetShiftsPerWorker(It.IsAny<int>())).Returns(Task.FromResult((IList<Shift>)new List<Shift>()));
 
             var controller = new ShiftController(mockedRepository.Object, mockedPublisher.Object);
             var newShift = new AddShift() {Day = new DateTime(2020, 1, 1), Type = ShiftType.ShiftFrom0To8, WorkerId = 1};
             // Act
             
             var result = controller.Add(newShift);
-            var okResult = result as OkObjectResult;
+            var okResult = result.Result as OkObjectResult;
 
             // Assert
             Assert.IsNotNull(okResult);
@@ -54,16 +55,16 @@ namespace Teamway.WorkManagementService.UnitTest
             list.Add(shift);
             var mockedPublisher = new Mock<IMessagePublisher>();
             var mockedRepository = new Mock<IRepository>();
-            mockedRepository.Setup(m => m.AddShift(It.IsAny<AddShift>())).Returns(1);
-            mockedRepository.Setup(m => m.GetWorker(It.IsAny<int>())).Returns(new Worker() { Id = 1, FirstName = "Jan", LastName = "Hello" });
-            mockedRepository.Setup(m => m.GetShiftsPerWorker(It.IsAny<int>())).Returns(new List<Shift>());
+            mockedRepository.Setup(m => m.AddShift(It.IsAny<AddShift>())).Returns(Task.FromResult(1));
+            mockedRepository.Setup(m => m.GetWorker(It.IsAny<int>())).Returns(Task.FromResult(new Worker() { Id = 1, FirstName = "Jan", LastName = "Hello" }));
+            mockedRepository.Setup(m => m.GetShiftsPerWorker(It.IsAny<int>())).Returns(Task.FromResult((IList<Shift>)new List<Shift>()));
 
             var controller = new ShiftController(mockedRepository.Object, mockedPublisher.Object);
             var newShift = new AddShift() { Day = new DateTime(2020, 1, 2), Type = ShiftType.ShiftFrom16To24, WorkerId = 1 };
             // Act
 
             var result = controller.Add(newShift);
-            var okResult = result as OkObjectResult;
+            var okResult = result.Result as OkObjectResult;
 
             // Assert
             Assert.IsNotNull(okResult);
@@ -83,11 +84,11 @@ namespace Teamway.WorkManagementService.UnitTest
             var mockedPublisher = new Mock<IMessagePublisher>();
             var mockedRepository = new Mock<IRepository>();
             var shift = new Shift() { Day = new DateTime(year, month, day), Type = type, WorkerId = workerId };
-            var list = new List<Shift>();
+            IList<Shift> list = new List<Shift>();
             list.Add(shift);
-            mockedRepository.Setup(m => m.AddShift(It.IsAny<AddShift>())).Returns(1);
-            mockedRepository.Setup(m => m.GetWorker(It.IsAny<int>())).Returns(new Worker() { Id = 1, FirstName = "Jan", LastName = "Hello" });
-            mockedRepository.Setup(m => m.GetShiftsPerWorker(It.IsAny<int>())).Returns(list);
+            mockedRepository.Setup(m => m.AddShift(It.IsAny<AddShift>())).Returns(Task.FromResult(1));
+            mockedRepository.Setup(m => m.GetWorker(It.IsAny<int>())).Returns(Task.FromResult(new Worker() { Id = 1, FirstName = "Jan", LastName = "Hello" }));
+            mockedRepository.Setup(m => m.GetShiftsPerWorker(It.IsAny<int>())).Returns(Task.FromResult(list));
 
             var controller = new ShiftController(mockedRepository.Object, mockedPublisher.Object);
             var newShift = new AddShift() { Day = new DateTime(2020, 1, 1), Type = ShiftType.ShiftFrom0To8, WorkerId = 1 };
@@ -107,18 +108,18 @@ namespace Teamway.WorkManagementService.UnitTest
         }
 
         [Test]
-        public void Get_WhenShiftExists_ThenShiftShouldBeReturned()
+        public async Task Get_WhenShiftExists_ThenShiftShouldBeReturned()
         {
             // Arrange
             var mockedPublisher = new Mock<IMessagePublisher>();
             var mockedRepository = new Mock<IRepository>();
             var shift = new Shift() { Id = 1, Day = new DateTime(2020, 2, 1), Type = ShiftType.ShiftFrom0To8, WorkerId = 3 };
 
-            mockedRepository.Setup(m => m.GetShift(It.IsAny<int>())).Returns(shift);
+            mockedRepository.Setup(m => m.GetShift(It.IsAny<int>())).Returns(Task.FromResult(shift));
             var controller = new ShiftController(mockedRepository.Object, mockedPublisher.Object);
 
             // Act
-            var result = controller.Get(1);
+            var result = await controller.GetAsync(1);
             var okResult = result as OkObjectResult;
 
             // Assert
@@ -138,12 +139,12 @@ namespace Teamway.WorkManagementService.UnitTest
             // Arrange
             var mockedPublisher = new Mock<IMessagePublisher>();
             var mockedRepository = new Mock<IRepository>();
-            mockedRepository.Setup(m => m.GetShift(It.IsAny<int>())).Returns((Shift)null);
+            mockedRepository.Setup(m => m.GetShift(It.IsAny<int>())).Returns(Task.FromResult((Shift)null));
             var controller = new ShiftController(mockedRepository.Object, mockedPublisher.Object);
 
             // Act
-            var result = controller.Get(1);
-            var notFoundResult = result as NotFoundResult;
+            var result = controller.GetAsync(1);
+            var notFoundResult = result.Result as NotFoundResult;
 
             // Assert
             Assert.IsNotNull(notFoundResult);
@@ -156,13 +157,13 @@ namespace Teamway.WorkManagementService.UnitTest
             // Arrange
             var mockedPublisher = new Mock<IMessagePublisher>();
             var mockedRepository = new Mock<IRepository>();
-            mockedRepository.Setup(m => m.RemoveShift(It.IsAny<int>())).Returns(RemoveShiftStatus.RecordDoesNotExist);
+            mockedRepository.Setup(m => m.RemoveShift(It.IsAny<int>())).Returns(Task.FromResult(RemoveShiftStatus.RecordDoesNotExist));
             var controller = new ShiftController(mockedRepository.Object, mockedPublisher.Object);
 
             // Act
             try
             {
-                controller.Remove(1);
+                controller.RemoveAsync(1);
             }
             catch (HttpResponseException exception)
             {
@@ -179,17 +180,41 @@ namespace Teamway.WorkManagementService.UnitTest
             // Arrange
             var mockedRepository = new Mock<IRepository>();
             var mockedPublisher = new Mock<IMessagePublisher>();
-            mockedRepository.Setup(m => m.RemoveShift(It.IsAny<int>())).Returns(RemoveShiftStatus.Ok);
+            mockedRepository.Setup(m => m.RemoveShift(It.IsAny<int>())).Returns(Task.FromResult(RemoveShiftStatus.Ok));
             var controller = new ShiftController(mockedRepository.Object, mockedPublisher.Object);
 
             // Act
-            var result = controller.Remove(1);
-            var okResult = result as OkResult;
+            var result = controller.RemoveAsync(1);
+            var okResult = result.Result as OkResult;
 
             // Assert
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
             mockedPublisher.Verify(m => m.SendMessageShiftRemoved(It.IsAny<Shift>()), Times.Once);
+        }
+
+        [Test]
+        public void GetShiftsPerWorker_WhenShiftExists_ThenShiftsShouldBeReturned()
+        {
+            // Arrange
+            var mockedRepository = new Mock<IRepository>();
+            var mockedPublisher = new Mock<IMessagePublisher>();
+            IList<Shift> list = new List<Shift>();
+            var shift = new Shift() { Day = new DateTime(2020, 11, 11), Type = ShiftType.ShiftFrom0To8, WorkerId = 1 };
+            list.Add(shift);
+            shift = new Shift() { Day = new DateTime(2021, 12, 11), Type = ShiftType.ShiftFrom0To8, WorkerId = 1 };
+            list.Add(shift);
+            mockedRepository.Setup(m => m.GetShiftsPerWorker(It.IsAny<int>())).Returns(Task.FromResult(list));
+            var controller = new ShiftController(mockedRepository.Object, mockedPublisher.Object);
+
+            // Act
+            var result = controller.GetShiftsPerWorkerAsync(1);
+            var okResult = result.Result as OkObjectResult;
+
+            // Assert
+            Assert.IsNotNull(okResult);
+            Assert.AreEqual(200, okResult.StatusCode);
+            var resultList = okResult.Value;
         }
     }
 }

@@ -8,8 +8,8 @@ namespace Teamway.WorkManagementService.API
 {
     public interface IMessagePublisher
     {
-        void SendMessageShiftCreated(Shift shift);
+        Task<int> SendMessageShiftCreated(Shift shift);
 
-        void SendMessageShiftRemoved(Shift shift);
+        Task<int> SendMessageShiftRemoved(Shift shift);
     }
 }

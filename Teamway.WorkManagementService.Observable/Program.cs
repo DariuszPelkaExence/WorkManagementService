@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using Teamway.WorkManagementService.Repository;
 
 namespace Teamway.WorkManagementService.Observable
 {
@@ -15,6 +16,7 @@ namespace Teamway.WorkManagementService.Observable
         {
             _serviceProvider = new ServiceCollection()
                 .AddSingleton<IMessageConsumer, MessageConsumer>()
+                .AddSingleton<IRepository, Repository.Repository>()
                 .BuildServiceProvider();
             var factory = new ConnectionFactory() { DispatchConsumersAsync = true };
             const string queueName = "WorkerServiceManagement";

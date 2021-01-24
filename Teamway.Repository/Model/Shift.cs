@@ -2,6 +2,7 @@
 
 namespace Teamway.WorkManagementService.Repository.Model
 {
+    [Serializable]
     public class Shift
     {
         public int Id { get; set; }

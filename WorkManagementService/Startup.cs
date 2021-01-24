@@ -15,18 +15,6 @@ using Teamway.Repository;
 
 namespace Teamway.WorkManagementService
 {
-    public static class MappingProfile
-    {
-        public static MapperConfiguration InitializeAutoMapper()
-        {
-            MapperConfiguration config = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new Mapper());  //mapping between Web and Business layer objects
-            });
-
-            return config;
-        }
-    }
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -41,7 +29,9 @@ namespace Teamway.WorkManagementService
         {
             services.AddControllers();
             services.AddSwaggerGen();
-            services.AddAutoMapper(typeof(Startup));
+            //services.AddAutoMapper(typeof(Startup));
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            
             services.AddScoped<IRepository, Teamway.Repository.Repository>();
         }
 

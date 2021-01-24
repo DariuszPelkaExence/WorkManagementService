@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Teamway.Repository.Entities
 {
-    public class WorkerEntity
+    internal class WorkerEntity
     {
         public int Id { get; set; }
 

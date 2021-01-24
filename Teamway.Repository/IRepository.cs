@@ -9,7 +9,7 @@ namespace Teamway.Repository
     {
         bool WorkerHasSameOrPreviousOrNextShift(int workerId, DateTime day, ShiftType type);
 
-        AddShiftStatus AddShift(Shift shift);
+        AddShiftStatus AddShift(AddShift shift);
 
         IList<Shift> GetShiftsPerWorker(int workerId);
 

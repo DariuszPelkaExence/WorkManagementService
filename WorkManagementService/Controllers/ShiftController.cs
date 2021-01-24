@@ -47,7 +47,7 @@ namespace Teamway.WorkManagementService.Controllers
             return Ok(shifts);
         }
         [Microsoft.AspNetCore.Mvc.HttpPost("Add", Name = "Add")]
-        public IActionResult Add(Shift shift)
+        public IActionResult Add(AddShift shift)
         {
             var worker = _repository.GetWorker(shift.WorkerId);
 

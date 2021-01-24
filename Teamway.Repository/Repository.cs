@@ -2,23 +2,34 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Teamway.Repository.Entities;
 using Teamway.Repository.Model;
 
 namespace Teamway.Repository
 {
     public class Repository : IRepository
     {
-        private static List<Shift> _shifts = new List<Shift>();
-        private static List<Worker> _workers = new List<Worker>();
+        private readonly IMapper _mapper;
+        private static List<ShiftEntity> _shifts = new List<ShiftEntity>();
+        private static List<WorkerEntity> _workers = new List<WorkerEntity>();
+
+
+        public Repository(IMapper mapper)
+        {
+            _mapper = mapper;
+        }
 
         public Shift GetShift(int shiftId)
         {
-            return _shifts.FirstOrDefault(m => m.Id == shiftId);
+            var shift = _shifts.FirstOrDefault(m => m.Id == shiftId);
+            return _mapper.Map<Shift>(shift);
         }
 
         public Worker GetWorker(int workerId)
         {
-            return _workers.FirstOrDefault(m => m.Id == workerId);
+            var worker = _workers.FirstOrDefault(m => m.Id == workerId);
+            return _mapper.Map<Worker>(worker);
         }
 
         public bool WorkerHasSameOrPreviousOrNextShift(int workerId, DateTime day, ShiftType type)
@@ -61,12 +72,13 @@ namespace Teamway.Repository
 
         public IList<Shift> GetShiftsPerWorker(int workerId)
         {
-            return _shifts.Where(m => m.Id == workerId).ToList();
+            var shifts = _shifts.Where(m => m.Id == workerId).ToList();
+            return _mapper.Map<IList<Shift>>(shifts);
         }
 
-        public AddShiftStatus AddShift(Shift shift)
+        public AddShiftStatus AddShift(AddShift shift)
         {
-            _shifts.Add(shift);
+            _shifts.Add(_mapper.Map<ShiftEntity>(shift));
 
             return AddShiftStatus.Ok;
         }
@@ -91,7 +103,7 @@ namespace Teamway.Repository
 
         public AddWorkerStatus AddWorker(Worker worker)
         {
-            _workers.Add(worker);
+            _workers.Add(_mapper.Map<WorkerEntity>(worker));
 
             return AddWorkerStatus.Ok;
         }

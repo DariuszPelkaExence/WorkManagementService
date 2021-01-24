@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.OpenApi.Models;
 using Teamway.Repository;
 
@@ -28,6 +29,7 @@ namespace Teamway.WorkManagementService
         {
             services.AddControllers();
             services.AddSwaggerGen();
+            services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IRepository, Teamway.Repository.Repository>();
         }
 

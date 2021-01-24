@@ -9,8 +9,8 @@ namespace Teamway.WorkManagementService.Repository
     public class Repository : IRepository
     {
         private readonly IMapper _mapper;
-        private static IList<ShiftEntity> _shifts = new List<ShiftEntity>();
-        private static IList<WorkerEntity> _workers = new List<WorkerEntity>();
+        private static readonly IList<ShiftEntity> _shifts = new List<ShiftEntity>();
+        private static readonly IList<WorkerEntity> _workers = new List<WorkerEntity>();
 
         public Repository(IMapper mapper)
         {
@@ -61,31 +61,6 @@ namespace Teamway.WorkManagementService.Repository
             else
             {
                 status = RemoveShiftStatus.RecordDoesNotExist;
-            }
-
-            return status;
-        }
-
-        public AddWorkerStatus AddWorker(Worker worker)
-        {
-            _workers.Add(_mapper.Map<WorkerEntity>(worker));
-
-            return AddWorkerStatus.Ok;
-        }
-
-        public RemoveWorkerStatus RemoveWorker(int workerId)
-        {
-            var status = RemoveWorkerStatus.Ok;
-
-            var worker = _workers.FirstOrDefault(m => m.Id == workerId);
-
-            if (worker != null)
-            {
-                _workers.Remove(worker);
-            }
-            else
-            {
-                status = RemoveWorkerStatus.WorkerDoesNotExist;
             }
 
             return status;

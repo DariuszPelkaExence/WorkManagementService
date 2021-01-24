@@ -103,7 +103,7 @@ namespace Teamway.WorkManagementService.UnitTest
         }
 
         [Test]
-        public void Get_WhenNewShiftExists_ThenShiftShouldBeReturned()
+        public void Get_WhenShiftExists_ThenShiftShouldBeReturned()
         {
             // Arrange
             var mockedRepository = new Mock<IRepository>();
@@ -128,7 +128,7 @@ namespace Teamway.WorkManagementService.UnitTest
         }
 
         [Test]
-        public void Get_WhenNewShiftDoesNotExist_Then404ShouldBeReturned()
+        public void Get_WhenShiftDoesNotExist_Then404ShouldBeReturned()
         {
             // Arrange
             var mockedRepository = new Mock<IRepository>();
@@ -142,6 +142,46 @@ namespace Teamway.WorkManagementService.UnitTest
             // Assert
             Assert.IsNotNull(notFoundResult);
             Assert.AreEqual(404, notFoundResult.StatusCode);
+        }
+
+        [Test]
+        public void Remove_WhenShiftDoesNotExist_ThenExceptionShouldBeReturned()
+        {
+            // Arrange
+            var mockedRepository = new Mock<IRepository>();
+            mockedRepository.Setup(m => m.RemoveShift(It.IsAny<int>())).Returns(RemoveShiftStatus.RecordDoesNotExist);
+            var controller = new ShiftController(mockedRepository.Object);
+
+            // Act
+            try
+            {
+                controller.Remove(1);
+            }
+            catch (HttpResponseException exception)
+            {
+                // Assert
+                Assert.IsTrue(true);
+                var errorMessage = exception.Response.Content.ReadAsStringAsync().Result;
+                Assert.AreEqual("Shift record could not be removed", errorMessage);
+            }
+        }
+
+        [Test]
+        public void Remove_WhenShiftExists_ThenShiftShouldBeReturned()
+        {
+            // Arrange
+            var mockedRepository = new Mock<IRepository>();
+
+            mockedRepository.Setup(m => m.RemoveShift(It.IsAny<int>())).Returns(RemoveShiftStatus.Ok);
+            var controller = new ShiftController(mockedRepository.Object);
+
+            // Act
+            var result = controller.Remove(1);
+            var okResult = result as OkResult;
+
+            // Assert
+            Assert.IsNotNull(okResult);
+            Assert.AreEqual(200, okResult.StatusCode);
         }
     }
 }

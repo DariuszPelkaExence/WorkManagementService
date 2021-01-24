@@ -144,26 +144,13 @@ namespace Teamway.WorkManagementService.API
             }
             else
             {
-                if (operationStatus == RemoveShiftStatus.RecordDoesNotExist)
+                var error = new HttpResponseMessage(HttpStatusCode.NotFound)
                 {
-                    var response = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent("Shift doesn't exist", System.Text.Encoding.UTF8,
-                            "text/plain"),
-                        StatusCode = HttpStatusCode.NotFound
-                    };
-                    throw new HttpResponseException(response);
-                }
-                else
-                {
-                    var error = new HttpResponseMessage(HttpStatusCode.NotFound)
-                    {
-                        Content = new StringContent("Shift record could not be removed", System.Text.Encoding.UTF8,
-                            "text/plain"),
-                        StatusCode = HttpStatusCode.NotFound
-                    };
-                    throw new HttpResponseException(error);
-                }
+                    Content = new StringContent("Shift record could not be removed", System.Text.Encoding.UTF8,
+                        "text/plain"),
+                    StatusCode = HttpStatusCode.NotFound
+                };
+                throw new HttpResponseException(error);
             }
         }
     }

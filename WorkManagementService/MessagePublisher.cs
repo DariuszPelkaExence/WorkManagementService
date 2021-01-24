@@ -26,7 +26,7 @@ namespace Teamway.WorkManagementService.API
                     {
                         using (var channel = connection.CreateModel())
                         {
-                            channel.QueueDeclare(queue: "ShiftCreated",
+                            channel.QueueDeclare(queue: "WorkManagementService",
                                 durable: false,
                                 exclusive: false,
                                 autoDelete: false,

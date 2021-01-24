@@ -15,8 +15,9 @@ namespace Teamway.WorkManagementService.Observable
             _repository = repository;
         }
 
-        public void ConsumeWorkerCreatedMessage()
+        public void ConsumeWorkerCreatedMessage(string message)
         {
+            // Parse message to worker class
             var worker = new Worker();
             // Take message from message queue from microservice dealing with workers data management and parse worker
             _repository.AddWorker(worker);//Here code which adds new worker record to repository

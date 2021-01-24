@@ -13,10 +13,12 @@ namespace Teamway.WorkManagementService.API
     public class ShiftController : Controller
     {
         private readonly IRepository _repository;
+        private readonly IMessagePublisher _messagePublisher;
 
-        public ShiftController(IRepository repository)
+        public ShiftController(IRepository repository, IMessagePublisher messagePublisher)
         {
             _repository = repository;
+            _messagePublisher = messagePublisher;
         }
 
         private bool WorkerHasSameOrPreviousOrNextShift(int workerId, DateTime day, ShiftType type)
@@ -95,6 +97,8 @@ namespace Teamway.WorkManagementService.API
 
                     if (id > 0)
                     {
+                        var newShift = _repository.GetShift(id);
+                        _messagePublisher.SendMessageShiftCreated(newShift);
                         return Ok(id);
                     }
                     else
@@ -136,6 +140,8 @@ namespace Teamway.WorkManagementService.API
         [Microsoft.AspNetCore.Mvc.HttpDelete("Remove", Name = "Remove")]
         public IActionResult Remove(int shiftId)
         {
+            var removedShift = _repository.GetShift(shiftId);
+            _messagePublisher.SendMessageShiftRemoved(removedShift);
             var operationStatus = _repository.RemoveShift(shiftId);
 
             if (operationStatus == RemoveShiftStatus.Ok)

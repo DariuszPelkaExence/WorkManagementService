@@ -16,12 +16,10 @@ namespace Teamway.WorkManagementService.Controllers
   [System.Web.Http.Route("~/[controller]")]
     public class ShiftController : Controller
     {
-        private readonly ILogger<WeatherForecastController> _logger;
         private readonly IRepository _repository;
 
-        public ShiftController(ILogger<WeatherForecastController> logger, IRepository repository)
+        public ShiftController(IRepository repository)
         {
-            _logger = logger;
             _repository = repository;
         }
 

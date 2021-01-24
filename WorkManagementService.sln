@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkManagementService", "WorkManagementService\WorkManagementService.csproj", "{2706F392-CE44-4E61-ABD0-4E0120DDB4EF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Teamway.WorkManagementService", "WorkManagementService\Teamway.WorkManagementService.csproj", "{2706F392-CE44-4E61-ABD0-4E0120DDB4EF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teamway.Repository", "Teamway.Repository\Teamway.Repository.csproj", "{BB78D487-BEFE-44CA-B08E-E7C2DD5E63CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teamway.WorkManagementServiceUnitTest", "Teamway.WorkManagementServiceUnitTest\Teamway.WorkManagementServiceUnitTest.csproj", "{543DF3D8-FD0A-46DA-A814-7337504F2F6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{BB78D487-BEFE-44CA-B08E-E7C2DD5E63CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB78D487-BEFE-44CA-B08E-E7C2DD5E63CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB78D487-BEFE-44CA-B08E-E7C2DD5E63CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{543DF3D8-FD0A-46DA-A814-7337504F2F6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{543DF3D8-FD0A-46DA-A814-7337504F2F6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{543DF3D8-FD0A-46DA-A814-7337504F2F6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{543DF3D8-FD0A-46DA-A814-7337504F2F6A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

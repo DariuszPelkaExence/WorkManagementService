@@ -26,14 +26,14 @@ namespace Teamway.WorkManagementService.API
                     {
                         using (var channel = connection.CreateModel())
                         {
-                            channel.QueueDeclare(queue: "WorkManagementService",
+                            channel.QueueDeclare(queue: "WorkManagementServiceQueue",
                                 durable: false,
                                 exclusive: false,
                                 autoDelete: false,
                                 arguments: null);
 
-                            String jsonified = JsonConvert.SerializeObject(shift);
-                            byte[] customerBuffer = Encoding.UTF8.GetBytes(jsonified);
+                            String json = JsonConvert.SerializeObject(shift);
+                            byte[] customerBuffer = Encoding.UTF8.GetBytes(json);
                             channel.BasicPublish(exchange: "",
                                 routingKey: "ShiftCreated",
                                 basicProperties: null,
@@ -63,14 +63,14 @@ namespace Teamway.WorkManagementService.API
                     {
                         using (var channel = connection.CreateModel())
                         {
-                            channel.QueueDeclare(queue: "ShiftRemoved",
+                            channel.QueueDeclare(queue: "WorkManagementServiceQueue",
                                 durable: false,
                                 exclusive: false,
                                 autoDelete: false,
                                 arguments: null);
 
-                            String jsonified = JsonConvert.SerializeObject(shift);
-                            byte[] customerBuffer = Encoding.UTF8.GetBytes(jsonified);
+                            String json = JsonConvert.SerializeObject(shift);
+                            byte[] customerBuffer = Encoding.UTF8.GetBytes(json);
                             channel.BasicPublish(exchange: "",
                                 routingKey: "ShiftRemoved",
                                 basicProperties: null,

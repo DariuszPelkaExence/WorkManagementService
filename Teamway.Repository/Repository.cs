@@ -65,5 +65,12 @@ namespace Teamway.WorkManagementService.Repository
 
             return status;
         }
+
+        public AddWorkerStatus AddWorker(Worker worker)
+        {
+            _workers.Add(_mapper.Map<WorkerEntity>(worker));
+
+            return AddWorkerStatus.Ok;
+        }
     }
 }

@@ -16,5 +16,7 @@ namespace Teamway.WorkManagementService.Repository
         Worker GetWorker(int workerId);
 
         RemoveShiftStatus RemoveShift(int shiftId);
+
+        AddWorkerStatus AddWorker(Worker worker);
     }
 }

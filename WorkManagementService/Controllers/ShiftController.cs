@@ -118,7 +118,7 @@ namespace Teamway.WorkManagementService.Controllers
                     {
                         Content = new StringContent("Shift same, previous ot next exists", System.Text.Encoding.UTF8,
                             "text/plain"),
-                        StatusCode = HttpStatusCode.NotFound
+                        StatusCode = HttpStatusCode.BadRequest
                     };
                     throw new HttpResponseException(error);
                 }

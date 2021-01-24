@@ -41,14 +41,17 @@ namespace Teamway.WorkManagementServiceUnitTest
         }
 
         [Test]
-        public void Add_WhenNewShiftWithSameTime_ThenShiftShouldNotBeAdded()
+        [TestCase(2020, 1, 2, ShiftType.ShiftFrom0To8, 1)]
+        [TestCase(2020, 1, 2, ShiftType.ShiftFrom16To24, 1)]
+        [TestCase(2020, 1, 1, ShiftType.ShiftFrom16To24, 1)]
+        public void Add_WhenNewShiftWithSameTime_ThenShiftShouldNotBeAdded(int year, int month, int day, ShiftType type, int workerId)
         {
             // Arrange
             var mockedRepository = new Mock<IRepository>();
-            var shift = new Shift() { Day = new DateTime(2020, 1, 1), Type = ShiftType.ShiftFrom0To8, WorkerId = 1 };
+            var shift = new Shift() { Day = new DateTime(year, month, day), Type = type, WorkerId = workerId };
             var list = new List<Shift>();
             list.Add(shift);
-        mockedRepository.Setup(m => m.AddShift(It.IsAny<AddShift>())).Returns(1);
+            mockedRepository.Setup(m => m.AddShift(It.IsAny<AddShift>())).Returns(1);
             mockedRepository.Setup(m => m.GetWorker(It.IsAny<int>())).Returns(new Worker() { Id = 1, FirstName = "Jan", LastName = "Hello" });
             mockedRepository.Setup(m => m.GetShiftsPerWorker(It.IsAny<int>())).Returns(list);
 
@@ -63,6 +66,8 @@ namespace Teamway.WorkManagementServiceUnitTest
             catch (HttpResponseException exception)
             {
                 Assert.IsTrue(true);
+                var errorMessage = exception.Response.Content.ReadAsStringAsync().Result;
+                Assert.AreEqual("Shift same, previous ot next exists", errorMessage);
             }
             
             // Assert

@@ -1,6 +1,6 @@
 using System;
 
-namespace WorkManagementService
+namespace Teamway.WorkManagementService
 {
     public class WeatherForecast
     {

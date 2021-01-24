@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WorkManagementService
+namespace Teamway.WorkManagementService
 {
     public class Program
     {

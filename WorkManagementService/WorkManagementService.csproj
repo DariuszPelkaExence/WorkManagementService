@@ -2,7 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>Teamway.WorkManagementService</AssemblyName>
+    <RootNamespace>Teamway.WorkManagementService</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Teamway.Repository\Teamway.Repository.csproj" />
+  </ItemGroup>
 
 
 </Project>

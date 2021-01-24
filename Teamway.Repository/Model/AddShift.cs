@@ -12,7 +12,5 @@ namespace Teamway.Repository.Model
         public ShiftType Type { get; set; }
 
         public int WorkerId { get; set; }
-
-        public int ShiftId { get; set; }
     }
 }

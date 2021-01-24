@@ -11,13 +11,19 @@ namespace Teamway.Repository
     public class Repository : IRepository
     {
         private readonly IMapper _mapper;
-        private static List<ShiftEntity> _shifts = new List<ShiftEntity>();
-        private static List<WorkerEntity> _workers = new List<WorkerEntity>();
+        private List<ShiftEntity> _shifts;
+        private List<WorkerEntity> _workers;
 
 
         public Repository(IMapper mapper)
         {
             _mapper = mapper;
+            
+            _shifts = new List<ShiftEntity>();
+            _workers = new List<WorkerEntity>();
+            _workers.Add(new WorkerEntity(){Id = 1, FirstName = "John", LastName = "Smith"});
+            _workers.Add(new WorkerEntity() { Id = 2, FirstName = "Sam", LastName = "Jackson" });
+            _workers.Add(new WorkerEntity() { Id = 3, FirstName = "Terry", LastName = "Grant" });
         }
 
         public Shift GetShift(int shiftId)

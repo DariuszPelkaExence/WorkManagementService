@@ -9,9 +9,9 @@ namespace Teamway.Repository.Model
     {
         public int Id { get; set; }
 
-        public DateTime Starts { get; set; }
+        public DateTime Day { get; set; }
 
-        public DateTime Ends { get; set; }
+        public ShiftType Type { get; set; }
 
         public int WorkerId { get; set; }
 

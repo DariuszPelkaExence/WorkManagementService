@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teamway.Repository.Model;
 
 
@@ -6,11 +7,15 @@ namespace Teamway.Repository
 {
     public interface IRepository
     {
+        bool WorkerHasSameOrPreviousOrNextShift(int workerId, DateTime day, ShiftType type);
+
         AddShiftStatus AddShift(Shift shift);
 
-        IList<Shift> GetShiftPerWorker(int workerId);
+        IList<Shift> GetShiftsPerWorker(int workerId);
 
         Shift GetShift(int shiftId);
+
+        Worker GetWorker(int workerId);
 
         RemoveShiftStatus RemoveShift(int shiftId);
 

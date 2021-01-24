@@ -38,55 +38,20 @@ namespace Teamway.Repository
             return _mapper.Map<Worker>(worker);
         }
 
-        public bool WorkerHasSameOrPreviousOrNextShift(int workerId, DateTime day, ShiftType type)
-        {
-            DateTime previousShiftDay = day;
-            ShiftType previousShiftType = type;
-            DateTime nextShiftDay = day;
-            ShiftType nextShiftType = type;
-
-            switch (type)
-            {
-                case ShiftType.ShiftFrom0To8:
-                    previousShiftDay = day.AddDays(-1);
-                    previousShiftType = ShiftType.ShiftFrom16To24;
-                    nextShiftDay = day;
-                    nextShiftType = ShiftType.ShiftFrom8To16;
-                    break;
-
-                case ShiftType.ShiftFrom8To16:
-                    previousShiftDay = day;
-                    previousShiftType = ShiftType.ShiftFrom0To8;
-                    nextShiftDay = day;
-                    nextShiftType = ShiftType.ShiftFrom16To24;
-                    break;
-
-                case ShiftType.ShiftFrom16To24:
-                    previousShiftDay = day;
-                    previousShiftType = ShiftType.ShiftFrom8To16;
-                    nextShiftDay = day.AddDays(1);
-                    nextShiftType = ShiftType.ShiftFrom0To8;
-                    break;
-                default:
-                    break;
-            }
-
-            return _shifts.Any(m => (m.WorkerId == workerId && m.Day == day && m.Type == type)
-            || (m.WorkerId == workerId && m.Day == previousShiftDay && m.Type == previousShiftType)
-            || (m.WorkerId == workerId && m.Day == nextShiftDay && m.Type == nextShiftType));
-        }
-
         public IList<Shift> GetShiftsPerWorker(int workerId)
         {
             var shifts = _shifts.Where(m => m.Id == workerId).ToList();
             return _mapper.Map<IList<Shift>>(shifts);
         }
 
-        public AddShiftStatus AddShift(AddShift shift)
+        public int AddShift(AddShift shift)
         {
-            _shifts.Add(_mapper.Map<ShiftEntity>(shift));
+            var highestId = _shifts.Count == 0 ? 0 :_shifts.Max(m => m.Id);
+            var entity = _mapper.Map<ShiftEntity>(shift);
+            entity.Id = highestId + 1;
+            _shifts.Add(entity);
 
-            return AddShiftStatus.Ok;
+            return entity.Id;
         }
 
         public RemoveShiftStatus RemoveShift(int shiftId)
@@ -131,35 +96,5 @@ namespace Teamway.Repository
 
             return status;
         }
-
-        public AssignShiftToWorkerEnum AssignShiftToWorker(int shiftId, int workerId)
-        {
-            var status = AssignShiftToWorkerEnum.Ok;
-
-            var shift = _shifts.FirstOrDefault(m => m.Id == shiftId);
-
-            if (shift != null)
-            {
-                _shifts.Remove(shift);
-            }
-            else
-            {
-                status = AssignShiftToWorkerEnum.ShiftDoesNotExist;
-            }
-
-            var worker = _workers.FirstOrDefault(m => m.Id == workerId);
-
-            if (shift != null)
-            {
-                _workers.Remove(worker);
-            }
-            else
-            {
-                status = AssignShiftToWorkerEnum.WorkerDoesNotExist;
-            }
-
-            return status;
-        }
-
     }
 }

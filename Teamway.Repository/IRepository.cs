@@ -7,9 +7,7 @@ namespace Teamway.Repository
 {
     public interface IRepository
     {
-        bool WorkerHasSameOrPreviousOrNextShift(int workerId, DateTime day, ShiftType type);
-
-        AddShiftStatus AddShift(AddShift shift);
+        int AddShift(AddShift shift);
 
         IList<Shift> GetShiftsPerWorker(int workerId);
 
@@ -22,7 +20,5 @@ namespace Teamway.Repository
         AddWorkerStatus AddWorker(Worker worker);
 
         RemoveWorkerStatus RemoveWorker(int workerId);
-
-        AssignShiftToWorkerEnum AssignShiftToWorker(int shiftId, int workerId);
     }
 }

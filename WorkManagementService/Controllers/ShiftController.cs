@@ -23,6 +23,45 @@ namespace Teamway.WorkManagementService.Controllers
             _repository = repository;
         }
 
+        private bool WorkerHasSameOrPreviousOrNextShift(int workerId, DateTime day, ShiftType type)
+        {
+            DateTime previousShiftDay = day;
+            ShiftType previousShiftType = type;
+            DateTime nextShiftDay = day;
+            ShiftType nextShiftType = type;
+
+            switch (type)
+            {
+                case ShiftType.ShiftFrom0To8:
+                    previousShiftDay = day.AddDays(-1);
+                    previousShiftType = ShiftType.ShiftFrom16To24;
+                    nextShiftDay = day;
+                    nextShiftType = ShiftType.ShiftFrom8To16;
+                    break;
+
+                case ShiftType.ShiftFrom8To16:
+                    previousShiftDay = day;
+                    previousShiftType = ShiftType.ShiftFrom0To8;
+                    nextShiftDay = day;
+                    nextShiftType = ShiftType.ShiftFrom16To24;
+                    break;
+
+                case ShiftType.ShiftFrom16To24:
+                    previousShiftDay = day;
+                    previousShiftType = ShiftType.ShiftFrom8To16;
+                    nextShiftDay = day.AddDays(1);
+                    nextShiftType = ShiftType.ShiftFrom0To8;
+                    break;
+                default:
+                    break;
+            }
+
+            var shifts = _repository.GetShiftsPerWorker(workerId);
+            return shifts.Any(m => (m.WorkerId == workerId && m.Day == day && m.Type == type)
+                                    || (m.WorkerId == workerId && m.Day == previousShiftDay && m.Type == previousShiftType)
+                                    || (m.WorkerId == workerId && m.Day == nextShiftDay && m.Type == nextShiftType));
+        }
+
         [Microsoft.AspNetCore.Mvc.HttpGet("Get", Name = "Get")]
         [Produces("application/json")]
         public IActionResult Get(int shiftId)
@@ -44,6 +83,7 @@ namespace Teamway.WorkManagementService.Controllers
             var shifts = _repository.GetShiftsPerWorker(workerId);
             return Ok(shifts);
         }
+
         [Microsoft.AspNetCore.Mvc.HttpPost("Add", Name = "Add")]
         public IActionResult Add(AddShift shift)
         {
@@ -51,15 +91,15 @@ namespace Teamway.WorkManagementService.Controllers
 
             if (worker != null)
             {
-                var shiftsExist = _repository.WorkerHasSameOrPreviousOrNextShift(shift.WorkerId, shift.Day, shift.Type);
+                var shiftsExist = WorkerHasSameOrPreviousOrNextShift(shift.WorkerId, shift.Day, shift.Type);
 
                 if (!shiftsExist)
                 {
-                    var operationStatus = _repository.AddShift(shift);
+                    var id = _repository.AddShift(shift);
 
-                    if (operationStatus == AddShiftStatus.Ok)
+                    if (id > 0)
                     {
-                        return Ok();
+                        return Ok(id);
                     }
                     else
                     {

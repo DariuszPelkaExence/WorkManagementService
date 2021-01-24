@@ -101,5 +101,47 @@ namespace Teamway.WorkManagementService.UnitTest
                 Assert.AreEqual("Shift same, previous ot next exists", errorMessage);
             }
         }
+
+        [Test]
+        public void Get_WhenNewShiftExists_ThenShiftShouldBeReturned()
+        {
+            // Arrange
+            var mockedRepository = new Mock<IRepository>();
+            var shift = new Shift() { Id = 1, Day = new DateTime(2020, 2, 1), Type = ShiftType.ShiftFrom0To8, WorkerId = 3 };
+
+            mockedRepository.Setup(m => m.GetShift(It.IsAny<int>())).Returns(shift);
+            var controller = new ShiftController(mockedRepository.Object);
+
+            // Act
+            var result = controller.Get(1);
+            var okResult = result as OkObjectResult;
+
+            // Assert
+            Assert.IsNotNull(okResult);
+            Assert.AreEqual(200, okResult.StatusCode);
+            var record = (Shift) okResult.Value;
+            Assert.AreEqual(1, record.Id);
+            Assert.AreEqual(3, record.WorkerId);
+            Assert.AreEqual(2020, record.Day.Year);
+            Assert.AreEqual(2, record.Day.Month);
+            Assert.AreEqual(1, record.Day.Day);
+        }
+
+        [Test]
+        public void Get_WhenNewShiftDoesNotExist_Then404ShouldBeReturned()
+        {
+            // Arrange
+            var mockedRepository = new Mock<IRepository>();
+            mockedRepository.Setup(m => m.GetShift(It.IsAny<int>())).Returns((Shift)null);
+            var controller = new ShiftController(mockedRepository.Object);
+
+            // Act
+            var result = controller.Get(1);
+            var notFoundResult = result as NotFoundResult;
+
+            // Assert
+            Assert.IsNotNull(notFoundResult);
+            Assert.AreEqual(404, notFoundResult.StatusCode);
+        }
     }
 }

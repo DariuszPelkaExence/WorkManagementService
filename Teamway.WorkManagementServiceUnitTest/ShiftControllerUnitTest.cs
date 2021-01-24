@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Web.Http;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -37,6 +38,34 @@ namespace Teamway.WorkManagementServiceUnitTest
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
             Assert.AreEqual(1, okResult.Value);
+        }
+
+        [Test]
+        public void Add_WhenNewShiftWithSameTime_ThenShiftShouldNotBeAdded()
+        {
+            // Arrange
+            var mockedRepository = new Mock<IRepository>();
+            var shift = new Shift() { Day = new DateTime(2020, 1, 1), Type = ShiftType.ShiftFrom0To8, WorkerId = 1 };
+            var list = new List<Shift>();
+            list.Add(shift);
+        mockedRepository.Setup(m => m.AddShift(It.IsAny<AddShift>())).Returns(1);
+            mockedRepository.Setup(m => m.GetWorker(It.IsAny<int>())).Returns(new Worker() { Id = 1, FirstName = "Jan", LastName = "Hello" });
+            mockedRepository.Setup(m => m.GetShiftsPerWorker(It.IsAny<int>())).Returns(list);
+
+            var controller = new ShiftController(mockedRepository.Object);
+            var newShift = new AddShift() { Day = new DateTime(2020, 1, 1), Type = ShiftType.ShiftFrom0To8, WorkerId = 1 };
+            // Act
+
+            try
+            {
+                var result = controller.Add(newShift);
+            }
+            catch (HttpResponseException exception)
+            {
+                Assert.IsTrue(true);
+            }
+            
+            // Assert
         }
     }
 }

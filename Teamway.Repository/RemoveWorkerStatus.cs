@@ -1,4 +1,4 @@
-﻿namespace Teamway.Repository
+﻿namespace Teamway.WorkManagementService.Repository
 {
     public enum RemoveWorkerStatus
     {

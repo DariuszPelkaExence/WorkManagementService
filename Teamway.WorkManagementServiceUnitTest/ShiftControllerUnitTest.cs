@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 using System.Web.Http;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using Teamway.Repository;
-using Teamway.Repository.Model;
-using Teamway.WorkManagementService.Controllers;
+using Teamway.WorkManagementService.API;
+using Teamway.WorkManagementService.Repository;
+using Teamway.WorkManagementService.Repository.Model;
 
-namespace Teamway.WorkManagementServiceUnitTest
+namespace Teamway.WorkManagementService.UnitTest
 {
     public class Tests
     {
         [SetUp]
+        // Not used
         public void Setup()
         {
         }

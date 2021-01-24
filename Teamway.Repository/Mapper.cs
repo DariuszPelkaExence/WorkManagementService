@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Teamway.Repository.Entities;
-using Teamway.Repository.Model;
-using AutoMapper;
+﻿using AutoMapper;
+using Teamway.WorkManagementService.Repository.Entities;
+using Teamway.WorkManagementService.Repository.Model;
 
-namespace Teamway.Repository
+namespace Teamway.WorkManagementService.Repository
 {
     public class Mapper : Profile
     {

@@ -1,17 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.InteropServices.ComTypes;
-using System.Threading.Tasks;
 using System.Web.Http;
-using Teamway.Repository;
-using Teamway.Repository.Model;
+using Teamway.WorkManagementService.Repository;
+using Teamway.WorkManagementService.Repository.Model;
 
-namespace Teamway.WorkManagementService.Controllers
+namespace Teamway.WorkManagementService.API
 {
   [System.Web.Http.Route("~/[controller]")]
     public class ShiftController : Controller
@@ -138,21 +134,21 @@ namespace Teamway.WorkManagementService.Controllers
 
 
         [Microsoft.AspNetCore.Mvc.HttpDelete("Remove", Name = "Remove")]
-        public IActionResult Remove(int workerId)
+        public IActionResult Remove(int shiftId)
         {
-            var operationStatus = _repository.RemoveWorker(workerId);
+            var operationStatus = _repository.RemoveShift(shiftId);
 
-            if (operationStatus == RemoveWorkerStatus.Ok)
+            if (operationStatus == RemoveShiftStatus.Ok)
             {
                 return Ok();
             }
             else
             {
-                if (operationStatus == RemoveWorkerStatus.WorkerDoesNotExist)
+                if (operationStatus == RemoveShiftStatus.RecordDoesNotExist)
                 {
                     var response = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
-                        Content = new StringContent("Worker doesn't exist", System.Text.Encoding.UTF8,
+                        Content = new StringContent("Shift doesn't exist", System.Text.Encoding.UTF8,
                             "text/plain"),
                         StatusCode = HttpStatusCode.NotFound
                     };
@@ -162,7 +158,7 @@ namespace Teamway.WorkManagementService.Controllers
                 {
                     var error = new HttpResponseMessage(HttpStatusCode.NotFound)
                     {
-                        Content = new StringContent("Worker record could not be removed", System.Text.Encoding.UTF8,
+                        Content = new StringContent("Shift record could not be removed", System.Text.Encoding.UTF8,
                             "text/plain"),
                         StatusCode = HttpStatusCode.NotFound
                     };

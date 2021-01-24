@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teamway.Repository.Model;
+using Teamway.WorkManagementService.Repository.Model;
 
 
-namespace Teamway.Repository
+namespace Teamway.WorkManagementService.Repository
 {
     public interface IRepository
     {

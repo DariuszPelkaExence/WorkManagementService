@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Teamway.Repository
+﻿namespace Teamway.WorkManagementService.Repository
 {
     public enum ShiftType
     {

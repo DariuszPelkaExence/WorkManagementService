@@ -1,19 +1,13 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using Microsoft.OpenApi.Models;
-using Teamway.Repository;
+using Teamway.WorkManagementService.Repository;
 
-namespace Teamway.WorkManagementService
+namespace Teamway.WorkManagementService.API
 {
     public class Startup
     {
@@ -29,10 +23,9 @@ namespace Teamway.WorkManagementService
         {
             services.AddControllers();
             services.AddSwaggerGen();
-            //services.AddAutoMapper(typeof(Startup));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             
-            services.AddScoped<IRepository, Teamway.Repository.Repository>();
+            services.AddScoped<IRepository, Repository.Repository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

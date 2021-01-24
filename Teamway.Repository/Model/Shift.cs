@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Teamway.Repository.Model
+namespace Teamway.WorkManagementService.Repository.Model
 {
     public class Shift
     {
@@ -14,7 +11,5 @@ namespace Teamway.Repository.Model
         public ShiftType Type { get; set; }
 
         public int WorkerId { get; set; }
-
-        public int ShiftId { get; set; }
     }
 }

@@ -1,26 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using Teamway.Repository.Entities;
-using Teamway.Repository.Model;
+using Teamway.WorkManagementService.Repository.Entities;
+using Teamway.WorkManagementService.Repository.Model;
 
-namespace Teamway.Repository
+namespace Teamway.WorkManagementService.Repository
 {
     public class Repository : IRepository
     {
         private readonly IMapper _mapper;
-        private List<ShiftEntity> _shifts;
-        private List<WorkerEntity> _workers;
-
+        private static IList<ShiftEntity> _shifts = new List<ShiftEntity>();
+        private static IList<WorkerEntity> _workers = new List<WorkerEntity>();
 
         public Repository(IMapper mapper)
         {
             _mapper = mapper;
-            
-            _shifts = new List<ShiftEntity>();
-            _workers = new List<WorkerEntity>();
             _workers.Add(new WorkerEntity(){Id = 1, FirstName = "John", LastName = "Smith"});
             _workers.Add(new WorkerEntity() { Id = 2, FirstName = "Sam", LastName = "Jackson" });
             _workers.Add(new WorkerEntity() { Id = 3, FirstName = "Terry", LastName = "Grant" });

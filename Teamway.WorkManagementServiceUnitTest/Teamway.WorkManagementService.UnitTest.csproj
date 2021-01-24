@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Teamway.Repository\Teamway.Repository.csproj" />
-    <ProjectReference Include="..\WorkManagementService\Teamway.WorkManagementService.csproj" />
+    <ProjectReference Include="..\Teamway.Repository\Teamway.WorkManagementService.Repository.csproj" />
+    <ProjectReference Include="..\WorkManagementService\Teamway.WorkManagementService.API.csproj" />
   </ItemGroup>
 
 </Project>

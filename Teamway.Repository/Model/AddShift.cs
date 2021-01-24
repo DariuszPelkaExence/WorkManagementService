@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Teamway.Repository.Model
+namespace Teamway.WorkManagementService.Repository.Model
 {
     public class AddShift
     {

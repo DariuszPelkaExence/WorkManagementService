@@ -1,8 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+using Teamway.WorkManagementService.Repository;
 
-namespace Teamway.Repository.Entities
+namespace Teamway.WorkManagementService.Repository.Entities
 {
     internal class ShiftEntity
     {

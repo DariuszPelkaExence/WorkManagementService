@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Teamway.Repository.Entities
+﻿namespace Teamway.WorkManagementService.Repository.Entities
 {
     internal class WorkerEntity
     {

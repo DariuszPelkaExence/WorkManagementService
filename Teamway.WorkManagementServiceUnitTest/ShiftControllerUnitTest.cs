@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Sources;
 using System.Web.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
@@ -104,17 +105,11 @@ namespace Teamway.WorkManagementService.UnitTest
                 {Day = new DateTime(2020, 1, 1), Type = ShiftType.ShiftFrom0To8, WorkerId = 1};
 
             // Act
-            try
-            {
-                controller.Add(newShift);
-            }
-            catch (HttpResponseException exception)
-            {
-                // Assert
-                Assert.IsTrue(true);
-                var errorMessage = exception.Response.Content.ReadAsStringAsync().Result;
-                Assert.AreEqual("Shift same, previous ot next exists", errorMessage);
-            }
+           var result = controller.Add(newShift);
+
+            // Assert
+            var exception = (AggregateException)result.Exception;
+            //Assert.IsNotNull(exception);
         }
 
         [Test]
@@ -171,19 +166,14 @@ namespace Teamway.WorkManagementService.UnitTest
             mockedRepository.Setup(m => m.RemoveShift(It.IsAny<int>()))
                 .Returns(Task.FromResult(RemoveShiftStatus.RecordDoesNotExist));
             var controller = new ShiftController(mockedRepository.Object, mockedPublisher.Object);
+            Task<IActionResult> result = null;
 
             // Act
-            try
-            {
-                controller.RemoveAsync(1);
-            }
-            catch (HttpResponseException exception)
-            {
-                // Assert
-                Assert.IsTrue(true);
-                var errorMessage = exception.Response.Content.ReadAsStringAsync().Result;
-                Assert.AreEqual("Shift record could not be removed", errorMessage);
-            }
+            result = controller.RemoveAsync(1);
+
+            // Assert
+            var exception = (AggregateException)result.Exception;
+            Assert.IsNotNull(exception);
         }
 
         [Test]

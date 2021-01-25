@@ -83,10 +83,10 @@ namespace Teamway.WorkManagementService.UnitTest
 
         // Test checking if shift can be added having same time as one we try to add or if we have a shift which is before or after one we try to add
         [Test]
-        [TestCase(2020, 1, 2, ShiftType.ShiftFrom0To8, 1)]
-        [TestCase(2020, 1, 2, ShiftType.ShiftFrom16To24, 1)]
-        [TestCase(2020, 1, 1, ShiftType.ShiftFrom16To24, 1)]
-        public void Add_WhenNewShiftWithSameTime_ThenShiftShouldNotBeAdded(int year, int month, int day, ShiftType type,
+        [TestCase(2020, 2, 2, ShiftType.ShiftFrom0To8, 1)]
+        [TestCase(2020, 2, 2, ShiftType.ShiftFrom8To16, 1)]
+        [TestCase(2020, 2, 1, ShiftType.ShiftFrom16To24, 1)]
+        public void Add_WhenNewShiftWithSameOrCloseTimes_ThenShiftShouldNotBeAdded(int year, int month, int day, ShiftType type,
             int workerId)
         {
             // Arrange
@@ -102,14 +102,14 @@ namespace Teamway.WorkManagementService.UnitTest
 
             var controller = new ShiftController(mockedRepository.Object, mockedPublisher.Object);
             var newShift = new AddShift()
-                {Day = new DateTime(2020, 1, 1), Type = ShiftType.ShiftFrom0To8, WorkerId = 1};
+                {Day = new DateTime(2020, 2, 2), Type = ShiftType.ShiftFrom0To8, WorkerId = 1};
 
             // Act
            var result = controller.Add(newShift);
 
             // Assert
             var exception = (AggregateException)result.Exception;
-            //Assert.IsNotNull(exception);
+            Assert.IsNotNull(exception);
         }
 
         [Test]

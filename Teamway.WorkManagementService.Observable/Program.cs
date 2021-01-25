@@ -24,7 +24,7 @@ namespace Teamway.WorkManagementService.Observable
             using (var connection = factory.CreateConnection())
             using (var channel = connection.CreateModel())
             {
-                channel.QueueDeclare(queueName, true, false, false, null);
+                channel.QueueDeclare(queueName, true, false, true, null);
 
                 // consumer
                 var consumer = new AsyncEventingBasicConsumer(channel);
@@ -37,12 +37,8 @@ namespace Teamway.WorkManagementService.Observable
         private static async Task MessageReceived(object sender, BasicDeliverEventArgs @event)
         {
             var message = Encoding.UTF8.GetString(@event.Body.ToArray());
-
-            if (@event.RoutingKey == "WorkerCreated")
-            {
-                var consumer = _serviceProvider.GetService<IMessageConsumer>();
-                consumer.ConsumeMessage(message);
-            }
+            var consumer = _serviceProvider.GetService<IMessageConsumer>();
+            consumer.ConsumeMessage(message);
         }
     }
 }

@@ -6,6 +6,6 @@ namespace Teamway.WorkManagementService.Observable
 {
     public interface IMessageConsumer
     {
-        void ConsumeWorkerCreatedMessage(string message);
+        void ConsumeMessage(string message);
     }
 }

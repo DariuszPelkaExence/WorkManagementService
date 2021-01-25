@@ -15,7 +15,7 @@ namespace Teamway.WorkManagementService.Observable
         static void Main(string[] args)
         {
             _serviceProvider = new ServiceCollection()
-                .AddTransient<IMessageConsumer, MessageConsumer>()
+                .AddTransient<IMessageConsumer, WorkerCreatedMessageConsumer>()
                 .AddSingleton<IRepository, Repository.Repository>()
                 .BuildServiceProvider();
             var factory = new ConnectionFactory() { DispatchConsumersAsync = true };
@@ -30,17 +30,19 @@ namespace Teamway.WorkManagementService.Observable
                 var consumer = new AsyncEventingBasicConsumer(channel);
                 consumer.Received += MessageReceived;
                 channel.BasicConsume(queueName, true, consumer);
+                Console.ReadLine();
             }
-
-            Console.ReadLine();
         }
 
         private static async Task MessageReceived(object sender, BasicDeliverEventArgs @event)
         {
             var message = Encoding.UTF8.GetString(@event.Body.ToArray());
-            var consumer = _serviceProvider.GetService<IMessageConsumer>();
-            //check if message is related to WorkerCreated message then call this method
-            consumer.ConsumeWorkerCreatedMessage(message);
+
+            if (@event.RoutingKey == "WorkerCreated")
+            {
+                var consumer = _serviceProvider.GetService<IMessageConsumer>();
+                consumer.ConsumeMessage(message);
+            }
         }
     }
 }

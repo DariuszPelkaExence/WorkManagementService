@@ -6,16 +6,16 @@ using Teamway.WorkManagementService.Repository.Model;
 
 namespace Teamway.WorkManagementService.Observable
 {
-    public class MessageConsumer : IMessageConsumer
+    public class WorkerCreatedMessageConsumer : IMessageConsumer
     {
         private readonly IRepository _repository;
 
-        public MessageConsumer(IRepository repository)
+        public WorkerCreatedMessageConsumer(IRepository repository)
         {
             _repository = repository;
         }
 
-        public void ConsumeWorkerCreatedMessage(string message)
+        public void ConsumeMessage(string message)
         {
             // Parse message to worker class
             var worker = new Worker();

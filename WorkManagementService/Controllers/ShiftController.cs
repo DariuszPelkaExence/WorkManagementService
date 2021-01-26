@@ -84,11 +84,11 @@ namespace Teamway.WorkManagementService.API
         }
 
         [Microsoft.AspNetCore.Mvc.HttpPost("Add", Name = "Add")]
-        public async Task<IActionResult> Add(AddShift shift)
+        public async Task<IActionResult> AddAsync(AddShift shift)
         {
             var worker = _repository.GetWorker(shift.WorkerId);
 
-            if (worker != null)
+            if (worker.Result != null)
             {
                 var shiftsExist = WorkerHasSameOrPreviousOrNextShift(shift.WorkerId, shift.Day, shift.Type);
 

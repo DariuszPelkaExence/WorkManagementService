@@ -30,6 +30,11 @@ namespace Teamway.WorkManagementService.Repository
         public async Task<Worker> GetWorker(int workerId)
         {
             var worker = _workers.FirstOrDefault(m => m.Id == workerId);
+            if (worker == null)
+            {
+                return null;
+            }
+
             return _mapper.Map<Worker>(worker);
         }
 

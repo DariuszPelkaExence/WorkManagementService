@@ -37,7 +37,7 @@ namespace Teamway.WorkManagementService.UnitTest
                 {Day = new DateTime(2020, 1, 1), Type = ShiftType.ShiftFrom0To8, WorkerId = 1};
             // Act
 
-            var result = controller.Add(newShift);
+            var result = controller.AddAsync(newShift);
             var okResult = result.Result as OkObjectResult;
 
             // Assert
@@ -71,7 +71,7 @@ namespace Teamway.WorkManagementService.UnitTest
                 {Day = new DateTime(2020, 1, 2), Type = ShiftType.ShiftFrom16To24, WorkerId = 1};
             // Act
 
-            var result = controller.Add(newShift);
+            var result = controller.AddAsync(newShift);
             var okResult = result.Result as OkObjectResult;
 
             // Assert
@@ -105,7 +105,7 @@ namespace Teamway.WorkManagementService.UnitTest
                 {Day = new DateTime(2020, 2, 2), Type = ShiftType.ShiftFrom0To8, WorkerId = 1};
 
             // Act
-           var result = controller.Add(newShift);
+           var result = controller.AddAsync(newShift);
 
             // Assert
             var exception = (AggregateException)result.Exception;
